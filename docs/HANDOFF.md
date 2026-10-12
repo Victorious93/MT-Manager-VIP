@@ -29,6 +29,8 @@ The PR targets `main`. The branch is `ccr-8fbcfc61-nujyty`.
 - Repo name `MT-Manager-VIP` is unchanged.
 - `compileSdk` 36 (the current AndroidX libraries require it). `targetSdk` 35. `minSdk` 26.
 - Dependency injection: Hilt, to be added in M1.
+- Recycle bin: **yes** (owner). One bin per storage volume, with a retention setting. Design in ARCHITECTURE.md §11.1. Built in M1.
+- In-app manual: **yes** (owner). A Help screen inside the app, with the manual kept as one source in `docs/USER_MANUAL.md`. Design in ARCHITECTURE.md §11.2. Viewer built in M1.
 - Approved by the owner: the architecture and the recommended defaults for the open questions in ARCHITECTURE.md §10.
 - **Still open:** distribution channel (Play Store vs sideload/F-Droid). This affects the all-files and install-package permissions. It must be decided before M1 is finished.
 - Commit trailers use `Co-Authored-By: Claude <noreply@anthropic.com>` with no model name.
@@ -86,7 +88,7 @@ Last verified result (M0 state, after the rename): BUILD SUCCESSFUL. One unit te
 
 1. Restore the parked files under the new package path `core-fs/src/main/kotlin/app/victoriousmanager/fs/` and `core-fs/src/test/kotlin/app/victoriousmanager/fs/`. Use `git show 'stash@{0}^3:<old path>'` for the untracked files and `git diff stash@{0}^1 stash@{0} -- core-fs` for the tracked change. Rename `app.fileforge` to `app.victoriousmanager` in each file. Do not `git stash pop`, because it conflicts with the renamed `FsEntry.kt`.
 2. Run the tests. Fix failures and the known problems above.
-3. Add the M1 UI on top of `:core-fs` (dual pane, tabs, selection, sort/filter, conflict dialog, storage-permission flow), with Hilt.
+3. Add the M1 UI on top of `:core-fs` (dual pane, tabs, selection, sort/filter, conflict dialog, storage-permission flow, Recycle bin with its Room index, Help screen), with Hilt. ARCHITECTURE.md §11.3 proposes splitting M1 into M1a and M1b; confirm with the owner before starting.
 4. Run the full build, then commit and push to `ccr-8fbcfc61-nujyty`.
 5. Open the M1 PR against `main`, update this file, and tell the owner.
 
@@ -94,5 +96,5 @@ Open a PR only once M1 is complete and verified. Do not open one for the parked 
 
 ## Owner's open questions
 
-1. Distribution channel (Play Store vs sideload/F-Droid). Needed before M1 is finished.
+1. Distribution channel: Google Play, direct APK download, or F-Droid. Explained in ARCHITECTURE.md §11.4. Needed before M1 is finished, because it affects the storage permission design.
 2. Whether the parked M1 work should be saved to a draft branch for durability. That would be a new branch, so it needs the owner's permission.

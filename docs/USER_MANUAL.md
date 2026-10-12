@@ -86,10 +86,24 @@ When the destination already has an item with the same name, you choose:
 ### 4.4 Rename
 Renames one item. The app refuses names that are empty, are `.` or `..`, or contain `/`.
 
-### 4.5 Delete
-**Warning: the planned design has no recycle bin.** Deleted items are removed permanently. Confirm the final delete behaviour in this section when M1 is built.
+### 4.5 Delete and the Recycle bin
 
-Deleting a folder deletes everything inside it. Deleting a [symbolic link](#15-glossary) removes only the link, not the item it points to.
+**[M1] Planned.** Delete moves items to the **Recycle bin** instead of removing them. Each storage device has its own bin, so deleting never copies data between devices.
+
+- Open the Recycle bin from the menu (exact location is confirmed when built).
+- **Restore** puts an item back where it came from. If something now occupies that place, the conflict choices in 4.3 apply.
+- **Delete permanently** removes an item without using the bin. The app asks you to confirm first.
+- **Empty bin** permanently removes everything in the bin.
+- Items stay in the bin for a set number of days (see Settings; default 30), then are removed automatically.
+
+Some items cannot go into the bin, so they are deleted permanently, and the app warns you before you confirm:
+
+- items inside archives;
+- items on network locations;
+- items the app cannot move (for example some system-owned files);
+- everything on a storage device where the bin cannot be created.
+
+Deleting a folder moves the whole folder. Deleting a [symbolic link](#15-glossary) moves only the link, not the item it points to.
 
 ### 4.6 New folder and new file
 Creates an empty folder or file in the current folder.
@@ -120,6 +134,7 @@ The full settings list is finalised when each feature is built. Planned settings
 |---|---|---|---|
 | Theme | M1 | Light, Dark, follow the system, or Dynamic colour (colours taken from your wallpaper; Android 12 or newer) | Follow the system |
 | Root mode | M7 | Allows file operations that need superuser access. Off by default. See [root](#15-glossary) | Off |
+| Keep deleted items for | M1 | Days an item stays in the Recycle bin before it is removed automatically | 30 days |
 | Language | M9 | Changes the app's language | System language |
 
 Step-by-step instructions for each setting will be added when the setting is built.
@@ -249,11 +264,17 @@ Terms are listed alphabetically.
 
 **Hidden file.** A file or folder whose name starts with a dot, such as `.nomedia`. Hidden items are not shown in lists unless you turn on "show hidden files".
 
+**In-app manual.** The user manual built into the app. It works offline and has a table of contents and search.
+
 **Integrity test.** A check that reads an archive's internal checksums to detect corruption, without extracting the files.
 
 **Job.** One copy, move or delete operation that runs in the background. Jobs are listed and can be cancelled.
 
 **Keystore.** A password-protected file that stores signing keys and certificates.
+
+**Permanent delete.** Removing an item without moving it to the Recycle bin. It cannot be restored from within the app.
+
+**Recycle bin.** A holding area inside the app where deleted items wait before they are removed for good. Items can be restored from it until they are emptied or removed automatically.
 
 **Regex (regular expression).** A pattern language for matching text. For example, `\d+` matches one or more digits.
 

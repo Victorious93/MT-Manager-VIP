@@ -112,7 +112,7 @@ Compose UI ─intent─► ViewModel ─► UseCase ─► FileProvider / JobQue
 | # | Scope | Exit criteria |
 |---|---|---|
 | **M0** | Repo skeleton: Gradle KTS, version catalog, modules `:app :core-fs :core-ui :core-data`, CI workflow, license, README | `./gradlew assembleDebug testDebugUnitTest lint` passes |
-| **M1** | Dual-pane browser, `LocalFileProvider`, paged listing, tabs, selection, sort/filter/hidden, file ops via JobQueue + foreground service, conflict dialog, storage-permission flow, settings (theme) | Unit tests green; manual checklist documented; user-manual sections for the new screens written in `docs/USER_MANUAL.md` |
+| **M1** | Dual-pane browser, `LocalFileProvider`, paged listing, tabs, selection, sort/filter/hidden, file ops via JobQueue + foreground service, conflict dialog, recycle bin, in-app manual viewer, storage-permission flow, settings (theme) | Unit tests green (including recycle-bin tests in §11.1); manual checklist documented; user-manual sections for the new screens written in `docs/USER_MANUAL.md` |
 | M2 | Archives as virtual folders (read), extract/create, passwords | Round-trip tests |
 | M3 | Text/code editor + syntax highlighting + find/replace | Editor prototype benchmark on 50MB file |
 | M4 | Media/PDF/hex viewers, checksum, bookmarks, recents, search | |
@@ -131,3 +131,52 @@ Compose UI ─intent─► ViewModel ─► UseCase ─► FileProvider / JobQue
 5. **Scope order:** is the milestone order above right, or should APK tools come before the editor?
 
 Nothing beyond this document has been created. Approve, or tell me what to change, and I will start M0.
+
+## 11. Additions from owner review
+
+### 11.1 Recycle bin (decided: yes; milestone M1)
+
+- **Behaviour.** Delete moves an item into the Recycle bin instead of removing it. Restore puts it back at its original path. Items are removed for good when the bin is emptied, when "Delete permanently" is used, or after the retention period.
+- **Location.** One bin per storage volume: `<volume root>/.victorious-bin/`. The name starts with a dot, so it is hidden, and the folder contains a `.nomedia` file so gallery apps skip it.
+- **Why one bin per volume.** A rename within one volume is instant and copies no data. A single shared bin would force a cross-volume copy on every delete.
+- **Index.** A Room table `TrashEntry` in `:core-data` with `id`, `originalPath`, `binPath`, `volumeId`, `isDirectory`, `sizeBytes` and `deletedAt`. Restore and retention use this table.
+- **Retention.** Setting "Keep deleted items for N days", default 30. Expired items are purged when the app starts and when the bin is opened. A background purge with WorkManager is a later option, not part of M1.
+- **Not sent to the bin.** These are deleted permanently, and the app warns before the user confirms:
+  - items inside archives;
+  - items on network locations (FTP, SFTP, SMB, WebDAV);
+  - items the app cannot rename into the bin, for example files it has no permission to move;
+  - every item on a volume where the bin folder cannot be created, for example under SAF-only access when the volume root is not granted.
+  The confirmation must state which case applies.
+- **Symbolic links.** The link itself moves to the bin. Its target is never touched.
+- **Restore conflicts.** Reuse the conflict choices from §4.3 of the manual: Skip, Overwrite, Keep both.
+- **M1 exit tests.** Delete, then restore round-trip; restore conflict; purge of expired entries; permanent-delete path; symlink moved and not followed; bin folder created with `.nomedia`.
+- **Known limit.** If the app's data is cleared or the app is reinstalled, the Room index is lost, but the files remain in the bin folders. Re-indexing them is out of scope for M1.
+
+### 11.2 In-app manual (decided: yes; viewer in M1, content grows per phase)
+
+- **Single source.** The manual text lives in `docs/USER_MANUAL.md` and is copied into the app's assets at build time. One source avoids two copies drifting apart. When the viewer is built, the manual is split into one file per section so the build can copy sections individually.
+- **Viewer.** A Help screen with a table of contents, a section view, and text search across all sections. It works offline.
+- **Context help.** Each feature screen gets a "?" button that opens that feature's manual section. Each phase adds its own buttons.
+- **Rendering.** The renderer supports only the Markdown the manual uses: headings, paragraphs, bullet lists, bold, italic, tables, links and in-manual anchors. A small in-house renderer keeps dependencies down. If the subset grows, adopt a Markdown library after a licence check.
+- **Version shown.** The Help screen shows the app version (`BuildConfig.VERSION_NAME`), so a reader knows which manual version they have.
+- **Language.** English until M9. Translated sections will live in separate asset folders.
+- **Tests.** Renderer unit tests for each supported element. A test fails the build if a "?" button points at a section that does not exist.
+
+### 11.3 Milestone impact
+
+- M1 grows to include the recycle bin and the manual viewer, so it is now the largest phase.
+- **Proposal, not yet applied to §9:** split M1 into **M1a** (browsing, storage permission, Help viewer) and **M1b** (file operations, job queue, recycle bin). Each PR stays reviewable, and each thread stays short.
+
+### 11.4 Distribution channel (not yet decided)
+
+"Distribution channel" means how users get the app onto their phones. There are three realistic options:
+
+| Route | How users get it | Review and rules | Updates | Likely effect on this app |
+|---|---|---|---|---|
+| **Google Play** | Google's official store | Google reviews each release against its policies. Apps that request all-files access must justify it in a declaration form, and the request can be refused. | Automatic | All-files access may be refused, so SAF-only browsing would need to work well |
+| **Direct APK** (for example GitHub Releases) | User downloads the APK file and installs it | No store review | Manual, unless the app adds its own update check (not planned) | Full all-files access. Users must allow installs from the source in Android settings |
+| **F-Droid** | A store for free and open-source Android apps | No all-files review, but its own inclusion rules and release schedule | Through F-Droid | Full all-files access. Source must be public |
+
+[Likely] These policy details should be checked against the current Google Play policy and F-Droid documentation before a decision.
+
+The decision affects M1's storage design, so it must be made before M1 is finished.
