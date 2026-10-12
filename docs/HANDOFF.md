@@ -10,6 +10,7 @@ Last updated after: **M0 complete**, PR #2 open.
 2. At the end of each phase: open a PR (or update the open one) containing that phase's code, then update this file.
 3. Tell the owner the PR link, then the owner closes the thread and starts a new one. Do not carry a long thread into the next phase.
 4. Open a PR only when a unit of work is complete. Do not open PRs for in-progress work.
+5. Every phase that adds a screen or a setting also adds its section to `docs/USER_MANUAL.md`, with step-by-step instructions that match the built UI. Do not write steps for screens that do not exist yet.
 
 ## Status
 
@@ -62,6 +63,10 @@ Note: `sdkmanager --licenses` accepts the Android SDK licence terms non-interact
 Known sandbox limit: Maven Central returns HTTP 429 (rate limit) during dependency resolution. Retry the same command after a short wait. Gradle keeps what it downloaded, so later attempts go further.
 
 Last verified result (M0 state, after the rename): BUILD SUCCESSFUL. One unit test (`FsEntryTest`) passed. Debug APK package `app.victoriousmanager`, label `Victorious-Manager`. Not run on a device. GitHub Actions has not run on this PR as far as I have verified.
+
+## User manual
+
+`docs/USER_MANUAL.md` is a skeleton with a full glossary. Its step-by-step sections are filled in per phase (see process item 5). Its status banner says which sections are still planned.
 
 ## Parked M1 work (untested, do not merge as-is)
 

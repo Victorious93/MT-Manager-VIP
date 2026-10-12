@@ -112,7 +112,7 @@ Compose UI ─intent─► ViewModel ─► UseCase ─► FileProvider / JobQue
 | # | Scope | Exit criteria |
 |---|---|---|
 | **M0** | Repo skeleton: Gradle KTS, version catalog, modules `:app :core-fs :core-ui :core-data`, CI workflow, license, README | `./gradlew assembleDebug testDebugUnitTest lint` passes |
-| **M1** | Dual-pane browser, `LocalFileProvider`, paged listing, tabs, selection, sort/filter/hidden, file ops via JobQueue + foreground service, conflict dialog, storage-permission flow, settings (theme) | Unit tests green; manual checklist documented |
+| **M1** | Dual-pane browser, `LocalFileProvider`, paged listing, tabs, selection, sort/filter/hidden, file ops via JobQueue + foreground service, conflict dialog, storage-permission flow, settings (theme) | Unit tests green; manual checklist documented; user-manual sections for the new screens written in `docs/USER_MANUAL.md` |
 | M2 | Archives as virtual folders (read), extract/create, passwords | Round-trip tests |
 | M3 | Text/code editor + syntax highlighting + find/replace | Editor prototype benchmark on 50MB file |
 | M4 | Media/PDF/hex viewers, checksum, bookmarks, recents, search | |
