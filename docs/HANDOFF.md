@@ -31,6 +31,9 @@ The PR targets `main`. The branch is `ccr-8fbcfc61-nujyty`.
 - Dependency injection: Hilt, to be added in M1.
 - Recycle bin: **yes** (owner). One bin per storage volume, with a retention setting. Design in ARCHITECTURE.md §11.1. Built in M1.
 - In-app manual: **yes** (owner). A Help screen inside the app, with the manual kept as one source in `docs/USER_MANUAL.md`. Design in ARCHITECTURE.md §11.2. Viewer built in M1.
+- Distribution: **direct APK download on GitHub Releases** (chosen by the assistant at the owner's request; reversible). ARCHITECTURE.md §11.4.
+- Milestones: **M1 split into M1a and M1b** (ARCHITECTURE.md §9). The owner delegated this choice.
+- Parked M1 code: saved to branch `wip/m1-core-parked` (untested, do not merge; not part of any PR).
 - Approved by the owner: the architecture and the recommended defaults for the open questions in ARCHITECTURE.md §10.
 - **Still open:** distribution channel (Play Store vs sideload/F-Droid). This affects the all-files and install-package permissions. It must be decided before M1 is finished.
 - Commit trailers use `Co-Authored-By: Claude <noreply@anthropic.com>` with no model name.
@@ -72,29 +75,30 @@ Last verified result (M0 state, after the rename): BUILD SUCCESSFUL. One unit te
 
 ## Parked M1 work (untested, do not merge as-is)
 
-- Location: local git stash `stash@{0}` ("M1 WIP (untested)"), based on commit `10a02d7`. It is **local to the sandbox**. If the container is reclaimed, it is lost.
-- A copy with the new package name is in the session scratchpad, but that copy is also session-local.
-- Contents (old package `app.fileforge`):
-  - Modified tracked file: `core-fs/src/main/kotlin/app/fileforge/fs/FsEntry.kt` (adds `SortField`, `ListOptions`, `PageRequest`, `Page`, `FsException`, `isHidden`)
-  - Untracked: `FileProvider.kt`, `LocalFileProvider.kt`, `FileOperations.kt`, `JobQueue.kt`
-  - Untracked tests: `LocalFileProviderTest.kt`, `FileOperationsTest.kt`, `JobQueueTest.kt`
+- Location: branch **`wip/m1-core-parked`** (pushed). The same files are also in the local sandbox stash `stash@{0}`, which may be lost.
+- Contents, under the new package `app.victoriousmanager`:
+  - `FsEntry.kt` (modified: adds `SortField`, `ListOptions`, `PageRequest`, `Page`, `FsException`, `isHidden`)
+  - `FileProvider.kt`, `LocalFileProvider.kt`: listing, paging, sorting, filtering; create, rename, delete
+  - `FileOperations.kt`: copy, move, delete with conflict handling
+  - `JobQueue.kt`: runs jobs one at a time, with cancel
+  - Tests: `LocalFileProviderTest.kt`, `FileOperationsTest.kt`, `JobQueueTest.kt`
 - **Status: never compiled, never passed tests.** The last test run was stopped by a time limit, so its result is unknown.
-- Known problems to fix before it can be a PR:
+- Known problems to fix before use:
   - `LocalFileProviderTest.pagesAreConsistentAndTotalIsFilteredCount` has a meaningless assertion (`...coerceAtMost(3).let { 3 }`). Replace it with a real check.
   - `JobQueue` cancellation logic (`isActiveScope`, the `CancellationException` branch) is untested and probably needs simplifying.
-  - `FileOperations` has not been reviewed for symlink, cross-volume move, and conflict-overwrite edge cases beyond the tests written.
+  - `FileOperations` has not been reviewed for symlink, cross-volume move, and overwrite edge cases beyond the tests written.
 
-## Next steps (start of the M1 thread)
+## Next steps (start of the M1a thread)
 
-1. Restore the parked files under the new package path `core-fs/src/main/kotlin/app/victoriousmanager/fs/` and `core-fs/src/test/kotlin/app/victoriousmanager/fs/`. Use `git show 'stash@{0}^3:<old path>'` for the untracked files and `git diff stash@{0}^1 stash@{0} -- core-fs` for the tracked change. Rename `app.fileforge` to `app.victoriousmanager` in each file. Do not `git stash pop`, because it conflicts with the renamed `FsEntry.kt`.
-2. Run the tests. Fix failures and the known problems above.
-3. Add the M1 UI on top of `:core-fs` (dual pane, tabs, selection, sort/filter, conflict dialog, storage-permission flow, Recycle bin with its Room index, Help screen), with Hilt. ARCHITECTURE.md §11.3 proposes splitting M1 into M1a and M1b; confirm with the owner before starting.
-4. Run the full build, then commit and push to `ccr-8fbcfc61-nujyty`.
-5. Open the M1 PR against `main`, update this file, and tell the owner.
+1. The owner merges PR #2 into `main` first. Otherwise the M1a PR would also contain the M0 commits.
+2. Continue on `ccr-8fbcfc61-nujyty`. If PR #2 has merged, reset the branch to `origin/main` first, as the session's git rules require.
+3. Build **M1a** (ARCHITECTURE.md §9): browsing, storage permission, theme setting, Help viewer.
+4. Take M1a's code from `wip/m1-core-parked`: `FsEntry.kt`, `FileProvider.kt`, `LocalFileProvider.kt` and `LocalFileProviderTest.kt`. Fix the known problems above. Leave `FileOperations.kt`, `JobQueue.kt` and their tests for M1b.
+5. Build the M1a UI with Hilt. Add the Help screen (ARCHITECTURE.md §11.2) and the manual sections for browsing and storage permission.
+6. Run `./gradlew --no-parallel lintDebug testDebugUnitTest assembleDebug`, then commit and push.
+7. Open the M1a PR against `main`, update this file, and tell the owner. M1b starts in a new thread.
 
-Open a PR only once M1 is complete and verified. Do not open one for the parked code.
+## Open questions for the owner
 
-## Owner's open questions
-
-1. Distribution channel: Google Play, direct APK download, or F-Droid. Explained in ARCHITECTURE.md §11.4. Needed before M1 is finished, because it affects the storage permission design.
-2. Whether the parked M1 work should be saved to a draft branch for durability. That would be a new branch, so it needs the owner's permission.
+1. None block M1a. The distribution choice (direct APK on GitHub Releases) was made by the assistant at the owner's request. Say if you want Google Play or F-Droid instead (ARCHITECTURE.md §11.4).
+2. Merge PR #2 once you are happy with M0. M1a starts after that.

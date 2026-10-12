@@ -112,7 +112,8 @@ Compose UI ─intent─► ViewModel ─► UseCase ─► FileProvider / JobQue
 | # | Scope | Exit criteria |
 |---|---|---|
 | **M0** | Repo skeleton: Gradle KTS, version catalog, modules `:app :core-fs :core-ui :core-data`, CI workflow, license, README | `./gradlew assembleDebug testDebugUnitTest lint` passes |
-| **M1** | Dual-pane browser, `LocalFileProvider`, paged listing, tabs, selection, sort/filter/hidden, file ops via JobQueue + foreground service, conflict dialog, recycle bin, in-app manual viewer, storage-permission flow, settings (theme) | Unit tests green (including recycle-bin tests in §11.1); manual checklist documented; user-manual sections for the new screens written in `docs/USER_MANUAL.md` |
+| **M1a** | Dual-pane browser, `LocalFileProvider` paged listing, tabs, selection, sort/filter/hidden, storage-permission flow (all-files and SAF), theme setting, Help viewer (TOC, sections, search) | Unit tests for listing, paging and sort green; Help renderer tests green; manual sections for browsing and permissions written |
+| **M1b** | File operations (copy, move, rename, delete, new, properties), conflict dialog, `JobQueue` + foreground service, Recycle bin (Room index, per-volume bin, retention), "?" context help for these screens | Unit tests for `FileOperations` and `JobQueue` green; recycle-bin tests in §11.1 green; manual sections for file operations and the Recycle bin written |
 | M2 | Archives as virtual folders (read), extract/create, passwords | Round-trip tests |
 | M3 | Text/code editor + syntax highlighting + find/replace | Editor prototype benchmark on 50MB file |
 | M4 | Media/PDF/hex viewers, checksum, bookmarks, recents, search | |
@@ -164,10 +165,10 @@ Nothing beyond this document has been created. Approve, or tell me what to chang
 
 ### 11.3 Milestone impact
 
-- M1 grows to include the recycle bin and the manual viewer, so it is now the largest phase.
-- **Proposal, not yet applied to §9:** split M1 into **M1a** (browsing, storage permission, Help viewer) and **M1b** (file operations, job queue, recycle bin). Each PR stays reviewable, and each thread stays short.
+- M1 grows to include the recycle bin and the manual viewer, so it was the largest phase.
+- **Decided and applied to §9:** M1 is split into **M1a** (browsing, storage permission, Help viewer) and **M1b** (file operations, job queue, recycle bin). Each PR stays reviewable, and each thread stays short. The owner delegated this choice.
 
-### 11.4 Distribution channel (not yet decided)
+### 11.4 Distribution channel (decided: direct APK download)
 
 "Distribution channel" means how users get the app onto their phones. There are three realistic options:
 
@@ -179,4 +180,13 @@ Nothing beyond this document has been created. Approve, or tell me what to chang
 
 [Likely] These policy details should be checked against the current Google Play policy and F-Droid documentation before a decision.
 
-The decision affects M1's storage design, so it must be made before M1 is finished.
+**Decision: direct APK download, published on GitHub Releases.** The assistant chose this at the owner's request ("U choose"). The owner can override it.
+
+Reasons:
+- The app needs all-files access, and its planned features (APK re-signing in M5, root in M7) are the ones most likely to be questioned in a store review. A store refusal is the outcome we cannot control.
+- With no store review, releases ship on our schedule.
+- F-Droid can be added later without changing the app.
+
+Cost: no automatic updates. Users install each new APK themselves (see the user manual, section 1.2).
+
+[Likely] Google Play's current policy on all-files access, and on installing or re-signing apps, should be checked before any future Play submission.

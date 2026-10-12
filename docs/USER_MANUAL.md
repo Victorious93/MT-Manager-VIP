@@ -21,7 +21,14 @@ Victorious-Manager is a file manager. It lets you browse, copy, move, rename and
 
 ### 1.2 Install
 
-**Planned.** Installation steps depend on how the app is distributed (Play Store, or a file you install directly). This section will be completed once that is decided. Installing a file directly requires allowing installs from that source in Android settings.
+**[Decided: direct download.]** The app is installed from its APK file, which you download yourself.
+
+1. Open the Victorious-Manager release page on GitHub. The link is added to the README at the first release.
+2. Download the file whose name ends in `.apk`.
+3. Open the downloaded file. If Android asks, allow installs from the app you used to download it (for example your browser or file manager). Android keeps this setting under "Install unknown apps".
+4. Tap **Install**.
+
+The app does not update itself. To update, download the new APK and install it over the old one. Updating over an installed version keeps the app's data, provided the new APK is signed with the same key as the old one.
 
 ### 1.3 Give the app access to your files
 
