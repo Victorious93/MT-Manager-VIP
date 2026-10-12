@@ -1,6 +1,6 @@
 # FileForge — Architecture & Milestone Plan
 
-Status: **DRAFT, awaiting approval.** No application code has been written yet.
+Status: **Approved** for M0–M1 (owner replied "All yes" to the open questions in §10). Distribution channel (Play Store vs sideload/F-Droid) was not decided by that reply and remains open.
 
 FileForge is an original, clean-room Android file manager and APK/text toolkit.
 It shares no code, assets, strings or branding with any existing app.
