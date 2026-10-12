@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "app.fileforge.fs"
+    namespace = "app.victoriousmanager.fs"
     compileSdk = 36
     defaultConfig { minSdk = 26 }
     compileOptions {

@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "app.fileforge"
+    namespace = "app.victoriousmanager"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "app.fileforge"
+        applicationId = "app.victoriousmanager"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

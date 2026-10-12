@@ -1,17 +1,17 @@
-package app.fileforge
+package app.victoriousmanager
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import app.fileforge.ui.FileForgeTheme
+import app.victoriousmanager.ui.VictoriousManagerTheme
 import androidx.compose.material3.Text
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            FileForgeTheme {
-                Text("FileForge")
+            VictoriousManagerTheme {
+                Text("Victorious-Manager")
             }
         }
     }

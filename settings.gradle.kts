@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "FileForge"
+rootProject.name = "Victorious-Manager"
 include(":app", ":core-fs", ":core-ui", ":core-data")

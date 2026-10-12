@@ -1,4 +1,4 @@
-# FileForge
+# Victorious-Manager
 
 An original, clean-room Android file manager and APK/text toolkit (dual-pane browser, archives, editor, APK tools).
 It shares no code, assets or branding with any other app.

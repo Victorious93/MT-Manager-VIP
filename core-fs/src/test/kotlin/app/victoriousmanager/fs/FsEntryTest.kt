@@ -1,4 +1,4 @@
-package app.fileforge.fs
+package app.victoriousmanager.fs
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

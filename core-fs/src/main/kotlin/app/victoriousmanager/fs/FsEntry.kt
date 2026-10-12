@@ -1,4 +1,4 @@
-package app.fileforge.fs
+package app.victoriousmanager.fs
 
 /** A location in some file system. M0 placeholder; providers arrive in M1. */
 @JvmInline

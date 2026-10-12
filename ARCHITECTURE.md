@@ -1,8 +1,8 @@
-# FileForge — Architecture & Milestone Plan
+# Victorious-Manager — Architecture & Milestone Plan
 
 Status: **Approved** for M0–M1 (owner replied "All yes" to the open questions in §10). Distribution channel (Play Store vs sideload/F-Droid) was not decided by that reply and remains open.
 
-FileForge is an original, clean-room Android file manager and APK/text toolkit.
+Victorious-Manager is an original, clean-room Android file manager and APK/text toolkit.
 It shares no code, assets, strings or branding with any existing app.
 
 ## 1. Goals and non-goals
@@ -124,7 +124,7 @@ Compose UI ─intent─► ViewModel ─► UseCase ─► FileProvider / JobQue
 
 ## 10. Open questions for you
 
-1. **Name/package:** "FileForge", package `app.fileforge` — OK? (Placeholder.)
+1. **Name/package:** resolved. Renamed to "Victorious-Manager" with package `app.victoriousmanager`; a hyphen is not valid in a Java package name, so the package drops it.
 2. **DI:** Hilt vs manual — recommend Hilt for this module count.
 3. **Distribution:** Play Store, or sideload/F-Droid? This affects permission scope (all-files, install packages).
 4. **Android SDK:** this environment may lack the SDK/NDK. M0 will start by checking; if absent I will need network access to install it, or CI will be the only build check.
