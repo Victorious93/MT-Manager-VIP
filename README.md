@@ -3,7 +3,7 @@
 An original, clean-room Android file manager and APK/text toolkit (dual-pane browser, archives, editor, APK tools).
 It shares no code, assets or branding with any other app.
 
-Status: **M0 — project skeleton.** See [ARCHITECTURE.md](ARCHITECTURE.md) for the design and milestone plan.
+Status: **M0 complete** (PR #2 open). M1 not started. See [docs/HANDOFF.md](docs/HANDOFF.md) for current state and next steps, and [ARCHITECTURE.md](ARCHITECTURE.md) for the design.
 
 ## Build
 
