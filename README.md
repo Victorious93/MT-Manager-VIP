@@ -7,7 +7,7 @@ Status: **M0 — project skeleton.** See [ARCHITECTURE.md](ARCHITECTURE.md) for 
 
 ## Build
 
-Requires JDK 17+ and the Android SDK (platform 35, build-tools 35).
+Requires JDK 17+ and the Android SDK (platform 36, build-tools 35).
 
 ```
 ./gradlew lintDebug testDebugUnitTest assembleDebug
