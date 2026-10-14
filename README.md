@@ -1,42 +1,61 @@
 # FileForge
 
-**An original, clean-room Android file manager and APK/text toolkit** (dual-pane browser, archives, editor, APK tools). It shares no code, assets, or branding with any other app.
+**A clean-room Android file manager and APK/text toolkit.**
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
-[![Kotlin](https://img.shields.io/badge/Kotlin-Android-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
-![Status: M0 skeleton](https://img.shields.io/badge/status-M0%20skeleton-orange)
-
-> **Repo name note:** this GitHub repository is still named `MT-Manager-VIP` (forked from an archived upstream “backup” repo). The **product in-tree is FileForge** (`applicationId` `app.fileforge`). Consider renaming the repository to match.
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.2-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack_Compose-4285F4?logo=jetpackcompose&logoColor=white)](https://developer.android.com/compose)
+![Min SDK 26](https://img.shields.io/badge/minSdk-26-3DDC84?logo=android&logoColor=white)
+![Status: early development](https://img.shields.io/badge/status-early_development-orange)
 
 ## Overview
 
-FileForge is planned as a dual-pane file manager with archive browsing, code editing, offline APK inspection/re-signing, media/hex viewers, network locations, terminal, and utilities — with no ads, telemetry, obfuscation, or anti-tamper.
+FileForge is an original Android app built with Kotlin, Jetpack Compose and Material 3. It shares no code, assets, or branding with any other app, and it has no ads, telemetry, obfuscation, or anti-tamper.
 
-**Status today: M0 — project skeleton.** Modules `:app`, `:core-fs`, `:core-ui`, `:core-data` exist; dual-pane browser and later milestones are not implemented yet. Design and milestone plan: [ARCHITECTURE.md](ARCHITECTURE.md).
+**Current status: M0, project skeleton.** The Gradle multi-module build, CI, and an app shell exist. The file browser and the other features below are not implemented yet. The design and milestone plan are in [ARCHITECTURE.md](ARCHITECTURE.md).
 
-## Features (planned vs present)
+## Key features
 
-| Area | Status |
-|---|---|
-| Gradle KTS multi-module skeleton, Compose deps, CI | Present (M0) |
-| Dual-pane browser, JobQueue, storage permission flow | Planned (M1+) |
-| Archives, editor, APK tools, network, terminal, root | Planned (M2–M8) |
+Implemented today (M0):
 
-Non-goals (from architecture): no accessibility-service/overlay abuse; no bypassing other apps’ licensing; APK tools operate on user-owned APKs only.
+- Gradle Kotlin DSL multi-module project (`:app`, `:core-fs`, `:core-ui`, `:core-data`) with a version catalog
+- Jetpack Compose and Material 3 app shell with a shared theme
+- GitHub Actions CI that runs lint, unit tests, and a debug build
 
-## Screenshots
+Planned (see [ARCHITECTURE.md](ARCHITECTURE.md) for milestones):
 
-| Dual-pane browser | Editor | APK tools | Settings |
-|---|---|---|---|
-| *TODO (not built)* | *TODO* | *TODO* | *TODO* |
+- Dual-pane file browser with tabs, selection, sorting, and background file operations (M1)
+- Archive browsing, extraction, and creation (M2)
+- Text and code editor with syntax highlighting (M3)
+- Media, PDF, and hex viewers, checksums, bookmarks, and search (M4)
+- Offline APK inspection, re-signing with your own keystore, and zipalign (M5)
+- Utilities such as compare, duplicate finder, and storage analyzer (M6)
+- Terminal and opt-in root mode (M7)
+- Network locations and an HTTP share server (M8)
 
-## Requirements
+Non-goals: no accessibility-service or overlay abuse, no bypassing other apps' licensing, and APK tools operate on APKs you own.
 
-- JDK **17+**
-- Android SDK: platform **36**, build-tools **35**
+Screenshots coming soon.
+
+## Install
+
+There are no published releases yet. To try the current skeleton, build it from source (below) and install the debug APK on a device or emulator running Android 8.0 (API 26) or newer:
+
+```sh
+adb install app/build/outputs/apk/debug/app-debug.apk
+```
+
+## Usage
+
+The current build only launches an app shell that shows the FileForge name. File management features arrive with milestone M1 and later.
+
+## Build from source
+
+Requirements:
+
+- JDK 17 or newer
+- Android SDK with platform 36 and build-tools 35
 - `minSdk` 26, `targetSdk` 35, `applicationId` `app.fileforge`
-
-## Build
 
 ```sh
 git clone https://github.com/Victorious93/MT-Manager-VIP.git
@@ -47,18 +66,18 @@ cd MT-Manager-VIP
 ## Project structure
 
 ```text
-app/          Application shell (Compose)
-core-fs/      File-system abstractions (interfaces; M0 stub)
-core-ui/      Shared UI / theme
-core-data/    Room / DataStore placeholders
-ARCHITECTURE.md   Goals, module graph, milestones M0–M9
-.github/workflows   CI
+app/              Application shell (Compose)
+core-fs/          File-system abstractions
+core-ui/          Shared UI and theme
+core-data/        Persistence module (Room and DataStore are planned)
+ARCHITECTURE.md   Goals, module graph, milestones M0-M9
+.github/workflows CI
 ```
 
 ## Contributing
 
-Issues/PRs welcome once the repo identity is clarified (FileForge vs legacy fork name). Prefer small milestones aligned with [ARCHITECTURE.md](ARCHITECTURE.md). Keep the clean-room rule: no code or assets from third-party file-manager apps.
+Issues and pull requests are welcome. Prefer small changes aligned with the milestones in [ARCHITECTURE.md](ARCHITECTURE.md), and keep the clean-room rule: no code or assets from third-party file-manager apps.
 
 ## License
 
-[Apache License 2.0](LICENSE).
+Licensed under the [Apache License 2.0](LICENSE).
